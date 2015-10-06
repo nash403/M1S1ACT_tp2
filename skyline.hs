@@ -1,3 +1,7 @@
+{-
+  skyline.hs
+  Authors: Honoré NINTUNZE & Antoine PETIT
+-}
 import System.IO
 import System.Environment
 import Data.List

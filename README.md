@@ -1,4 +1,5 @@
-# M1S1ACT_tp2
+# tp2 ACT
+# Honoré NINTUNZE et Antoine PETIT
 TP "diviser pour régner"
 
 Pour compiler le programme avoir ghc puis faire :
