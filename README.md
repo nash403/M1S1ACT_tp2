@@ -11,3 +11,8 @@ Pour exécuter le programme :
 
 /!\ Le chemin ne doit avoir qu'un seul point : celui de l'extension (non gestion de ./ et ../)
 Le fichier contenant les immeubles doit être bien formé
+
+Pour lancer un test :
+make test
+
+/!\ le programme doit avoir été compilé au préalable avec la commande "make"

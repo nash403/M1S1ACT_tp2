@@ -1,7 +1,10 @@
 all : skyline
 
 skyline: skyline.hs
-	ghc skyline.hs
-        
+	ghc -o skyline skyline.hs
+       
+test:
+	./skyline exemple.txt
+
 clean:
-	rm -f *~ *.o *.hi skyline
+	rm -f *~ *.o *.hi skyline exemple.html

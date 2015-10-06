@@ -45,11 +45,11 @@ constructSkyline [] = []
 constructSkyline [x] = toSkyline x
 constructSkyline xs = mergeSkyline (constructSkyline xs1) (constructSkyline xs2)
         where (xs1,xs2) = split xs
-
---Pour test, transforme les immeubles en points de manière violente
+{-
+--Pour les test, transforme les immeubles en points de manière violente
 immeublesToSkyline:: [Immeuble] -> Skyline
 immeublesToSkyline []           = []
-immeublesToSkyline ((g,h,d):xs) = (g,h):(d,0):(immeublesToSkyline xs)  
+immeublesToSkyline ((g,h,d):xs) = (g,h):(d,0):(immeublesToSkyline xs)-}
 
 --Transforme une Skyline où un point sur deux est écrit en Skyline où tout les points sont écrit
 listePointComplet:: Skyline -> Skyline
@@ -89,6 +89,6 @@ main = do
         handle <- openFile fichier ReadMode
         nbImmeuble <- hGetLine handle
         endFile <- hGetContents handle
-        lineToSVG (listePointComplet (immeublesToSkyline (readImmeuble (lines endFile) (read nbImmeuble::Int)))) ((suffFich fichier) ++ ".html") -- remplacé immeublesToSkyline par la fonction qui transforme une liste d'immeuble en skyline
-        putStr ("Le svg a été créé dans le fichier suivant : " ++ ((suffFich fichier) ++ ".html") ++ "\n")
+        lineToSVG (listePointComplet (constructSkyline (readImmeuble (lines endFile) (read nbImmeuble::Int)))) ((suffFich fichier) ++ ".html")
+        putStr ("Le svg a été créé dans le fichier suivant : " ++ ((suffFich fichier) ++ ".html") ++ ", pour une ligne de toit formée de "++ nbImmeuble ++" immeubles\n")
         hClose handle
