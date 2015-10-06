@@ -2,77 +2,22 @@ type Immeuble = (Int, Int, Int)
 type Point = (Int, Int)
 type Skyline = [Point]
 
-{-immeuble::Int -> Int -> Int -> Immeuble
-immeuble g h d = (g,h,d)
-
-g::Immeuble -> Int
-g (x,_,_) = x
-
-d::Immeuble -> Int
-d (_,_,x) = x
-
-h::Immeuble -> Int
-h (_,x,_) = x
-
-hasNext::Skyline -> Bool
-hasNext [] = False
-hasNext _  = True
-
-insereD::Int -> Immeuble -> Skyline -> Skyline
-insereD _ (_,_,d) []          = [(d,0)]
-insereD n (g,h,d) ((x,y):ss) =
-  if d > x
-  then
-    if h > y -- h est au dessus de la skyline
-    then (x,h):(insereD y (g,h,d) ss) --
-    else (x,y):(insereD y (g,h,d) ss)
-  else  -- d <= x
-    if (d < x)
-    then
-      if h > n -- le coin droit est visible
-      then (d,n):(x,y):ss
-      else  (x,y):ss -- le coin droit n'est pas visible
-    else -- d == x
-      (x,y):ss 
-
-insereImmeuble::Immeuble -> Skyline -> Skyline
-insereImmeuble (g,h,d) [] 		    = [(g,h),(d,0)]
-insereImmeuble (g,h,d) ((x,y):xs) =
-	if g > x -- g se trouve dans la skyline
-	then
-		if (((hasNext xs) &&  (g > (fst (head xs)))) || (!(hasNext xs))) --TODO vérifier insertion après skyline
-    then (x,y):(insereImmeuble (g,h,d) xs)
-    else -- g se trouve entre x et x+1
-      if h > y -- le coin gauche est visible
-      then (x,y):(g,h):(insereD y (g,h,d) xs)
-      else (x,y):(insereD y (g,h,d) xs) -- le coin gauche n'est pas visible
-  else -- g se trouve avant le reste de la skyline
-    -- g est visible
-    if d < x -- le coin droit est avant la skyline
-    then (g,h):(d,0):((x,y):xs)
-    else  
-      if d > x
-      then  
-        if (hasNext xs) && (d < fst (head xs)) -- d est entre x et x+1
-        then  
-          if h < y
-          then (g,h):(x,y):xs
-          else (g,h):(d,y):xs
-      else -- d == x
-        (g,h):(insereD y (g,h,d) xs)
-
-
-
--}
-
+-- Transforme un immeuble en Skyline composées de deux points 
 toSkyline::Immeuble -> Skyline
 toSkyline (g,h,d) = [(g,h),(d,0)]
 
+-- Fonction intermédiaire appelée par le mergeSkyline et qui fait effectivement le merge
 realMS:: Int -> Int -> Skyline -> Skyline -> Skyline
 realMS _ _ xs []                   = xs
 realMS _ _ [] xs                   = xs
 realMS h1 h2 ((m,n):ms) ((x,y):xs)
-        | m > x     = case h1 > y of  True  -> (if (h2 > h1) then (x,h1):realMS h1 y ((m,n):ms) xs else realMS h1 y ((m,n):ms) xs) 
+        | m > x     = case h1 >= y of True  -> (
+                                        if (h2 >= h1)
+                                        then
+                                          (if h2 == h1 then realMS h1 y ((m,n):ms) xs else (x,h1):realMS h1 y ((m,n):ms) xs)
+                                        else
+                                          (if (n > y) || (h1 == y) then realMS h1 y ((m,n):ms) xs else (m,y):realMS h1 y ((m,n):ms) xs)
+                                        ) 
                                       False -> (x,y):realMS h1 y ((m,n):ms) xs
         | m < x     = case h2 > n of  True  -> realMS n h2 ms ((x,y):xs)
                                       False -> (m,n):realMS n h2 ms ((x,y):xs)
@@ -86,3 +31,14 @@ mergeSkyline s1 s2 = realMS 0 0 s1 s2
 insereImmeuble::Immeuble -> Skyline -> Skyline
 insereImmeuble i [] = toSkyline i
 insereImmeuble i s  = mergeSkyline (toSkyline i) s
+
+
+split :: [a] -> ([a],[a])   
+split (x:y:zs) = (x:xs,y:ys) where (xs,ys) = split zs
+split xs       = (xs,[])
+
+constructSkyline::[Immeuble] -> Skyline
+constructSkyline [] = []
+constructSkyline [x] = toSkyline x
+constructSkyline xs = mergeSkyline (constructSkyline xs1) (constructSkyline xs2)
+        where (xs1,xs2) = split xs
