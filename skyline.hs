@@ -2,7 +2,7 @@ type Immeuble = (Int, Int, Int)
 type Point = (Int, Int)
 type Skyline = [Point]
 
-immeuble::Int -> Int -> Int -> Immeuble
+{-immeuble::Int -> Int -> Int -> Immeuble
 immeuble g h d = (g,h,d)
 
 g::Immeuble -> Int
@@ -24,8 +24,8 @@ insereD n (g,h,d) ((x,y):ss) =
   if d > x
   then
     if h > y -- h est au dessus de la skyline
-    then (x:h):(insereD y (g,h,d) ss) --
-    else (x:y):(insereD y (g,h,d) ss)
+    then (x,h):(insereD y (g,h,d) ss) --
+    else (x,y):(insereD y (g,h,d) ss)
   else  -- d <= x
     if (d < x)
     then
@@ -60,3 +60,29 @@ insereImmeuble (g,h,d) ((x,y):xs) =
           else (g,h):(d,y):xs
       else -- d == x
         (g,h):(insereD y (g,h,d) xs)
+
+
+
+-}
+
+toSkyline::Immeuble -> Skyline
+toSkyline (g,h,d) = [(g,h),(d,0)]
+
+realMS:: Int -> Int -> Skyline -> Skyline -> Skyline
+realMS _ _ xs []                   = xs
+realMS _ _ [] xs                   = xs
+realMS h1 h2 ((m,n):ms) ((x,y):xs)
+        | m > x     = case h1 > y of  True  -> (if (h2 > h1) then (x,h1):realMS h1 y ((m,n):ms) xs else realMS h1 y ((m,n):ms) xs) 
+                                      False -> (x,y):realMS h1 y ((m,n):ms) xs
+        | m < x     = case h2 > n of  True  -> realMS n h2 ms ((x,y):xs)
+                                      False -> (m,n):realMS n h2 ms ((x,y):xs)
+        | otherwise = case n > y of True  -> (m,n):realMS n y ms xs
+                                    False -> (x,y):realMS n y ms xs
+
+-- On insère s1 dans s2
+mergeSkyline::Skyline -> Skyline -> Skyline
+mergeSkyline s1 s2 = realMS 0 0 s1 s2
+
+insereImmeuble::Immeuble -> Skyline -> Skyline
+insereImmeuble i [] = toSkyline i
+insereImmeuble i s  = mergeSkyline (toSkyline i) s
