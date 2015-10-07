@@ -20,10 +20,11 @@ make test
 
 ## Réponses aux questions
 ###Q1
-*(2, 0)(2, 5)(4, 4)(4, 7)(5, 7)(5, 0) n'est pas une ligne de toit
-*(2, 0)(2, 5)(4, 5)(4, 7)(5, 7)(5, 0) est une ligne de toit
-*(2, 0)(2, 5)(4, 5)(4, 7)5, 7)(6, 7)(5, 0) n'est pas une ligne de toit
-*(2, 0)(2, 5)(4, 5)(4, 8)(4, 7)(5, 7)(5, 0) n'est pas une ligne de toit
+
+* (2, 0)(2, 5)(4, 4)(4, 7)(5, 7)(5, 0) n'est pas une ligne de toit
+* (2, 0)(2, 5)(4, 5)(4, 7)(5, 7)(5, 0) est une ligne de toit
+* (2, 0)(2, 5)(4, 5)(4, 7)5, 7)(6, 7)(5, 0) n'est pas une ligne de toit
+* (2, 0)(2, 5)(4, 5)(4, 8)(4, 7)(5, 7)(5, 0) n'est pas une ligne de toit
 
 ###Q2
 Il faut que sur deux point successifs on ait une abscisse ou une ordonnée commune et il faut que l'abscisse soit croissante dans l'ordre des points.
