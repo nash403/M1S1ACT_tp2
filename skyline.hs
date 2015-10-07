@@ -14,7 +14,7 @@ type Skyline = [Point]
 toSkyline::Immeuble -> Skyline
 toSkyline (g,h,d) = [(g,h),(d,0)]
 
-{-
+{- (realMS pour realMergeSkyline)
   realMS h1 h2 s1 s2: Fonction intermédiaire appelée par mergeSkyline et qui fait effectivement le merge
   h1 la dernière hauteur visitée de s1
   h2 la dernière hauteur visitée de s2
