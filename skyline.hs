@@ -14,12 +14,22 @@ type Skyline = [Point]
 toSkyline::Immeuble -> Skyline
 toSkyline (g,h,d) = [(g,h),(d,0)]
 
-{- Fonction intermédiaire appelée par mergeSkyline et qui fait effectivement le merge -}
+{-
+  realMS h1 h2 s1 s2: Fonction intermédiaire appelée par mergeSkyline et qui fait effectivement le merge
+  h1 la dernière hauteur visitée de s1
+  h2 la dernière hauteur visitée de s2
+  s1 la skyline que l'ont veut intégrer à la skyline s2
+  s2 la skyline dans laquelle on insère la skyline s1
+-}
 realMS:: Int -> Int -> Skyline -> Skyline -> Skyline
+-- si une des 2 skyline est vide on renvoit l'autre
 realMS _ _ xs []                   = xs
 realMS _ _ [] xs                   = xs
+-- les deux skylines ne sont pas vides
 realMS h1 h2 ((m,n):ms) ((x,y):xs)
-        | m > x     = case h1 >= y of True  -> (
+        -- si le point courrant de s1 est après le point courrant de s2 
+        | m > x     = case h1 >= y of True  -> ( -- le dernier point visité de s1 est plus haut que le point courrant de s2
+                              -- le dernier point visité de s2 est plus haut que le denier point visité de s1 et donc du point courrant de s1
                                         if (h2 >= h1)
                                         then
                                           (if h2 == h1 then realMS h1 y ((m,n):ms) xs else (x,h1):realMS h1 y ((m,n):ms) xs)
