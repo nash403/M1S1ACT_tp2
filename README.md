@@ -19,6 +19,7 @@ make test
 /!\ le programme doit avoir été compilé au préalable avec la commande "make"
 
 ## Réponses aux questions
+
 ###Question 1
 
 * (2, 0)(2, 5)(4, 4)(4, 7)(5, 7)(5, 0) n'est pas une ligne de toit
